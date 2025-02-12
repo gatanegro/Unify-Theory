@@ -1,0 +1,97 @@
+
+
+
+
+%% Parameters
+f_source = 2;         % Source intrinsic frequency (Hz)
+v_field = 300;        % Speed of oscillation propagation (m/s)
+v_source = 50;        % Source velocity (m/s)
+v_observer = 30;      % Observer velocity (m/s)
+
+x = linspace(0, 100, 1000); % Spatial grid
+t = linspace(0, 20, 1000);  % Time grid
+
+%% Observed Frequency via Doppler Effect
+f_observed = f_source * (v_field + v_observer) / (v_field + v_source);
+disp(['Source Frequency: ', num2str(f_source), ' Hz']);
+disp(['Observed Frequency with Doppler Effect: ', num2str(f_observed), ' Hz']);
+
+%% Create Oscillatory Field Medium
+[X, T] = meshgrid(x, t); % Space-time grid
+oscillatory_field = sin(2 * pi * f_source * T - (2 * pi / v_field) * X);
+
+%% Doppler-Shifted Oscillation
+oscillation_source = sin(2 * pi * f_source * (T - X / v_field));
+oscillation_observed = sin(2 * pi * f_observed * (T - X / v_field));
+
+%% Combined Field (Including Energy Redistribution)
+field_combined = oscillatory_field + oscillation_source + oscillation_observed;
+
+%% Energy Density Redistribution
+energy_density = (field_combined).^2; % Squared amplitude for energy density
+
+%% Intersection Analysis at a Specific Time Slice
+time_index = 500; % Specific time index for analysis
+combined_slice = field_combined(time_index, :);
+energy_slice = energy_density(time_index, :);
+
+% Identify Intersection Points
+intersection_points = abs(combined_slice - energy_slice) < 0.05;
+intersection_x = x(intersection_points);
+intersection_y = combined_slice(intersection_points);
+
+%% Visualization
+
+% Universal Oscillatory Field
+figure;
+subplot(3,1,1);
+imagesc(x, t, oscillatory_field);
+set(gca, 'YDir', 'normal');
+xlabel('Distance (m)');
+ylabel('Time (s)');
+title('Universal Oscillatory Field');
+colorbar;
+
+% Doppler-Shifted Source Oscillation
+subplot(3,1,2);
+imagesc(x, t, oscillation_observed);
+set(gca, 'YDir', 'normal');
+xlabel('Distance (m)');
+ylabel('Time (s)');
+title('Doppler-Shifted Source Oscillation');
+colorbar;
+
+% Combined Field with Redistribution
+subplot(3,1,3);
+imagesc(x, t, field_combined);
+set(gca, 'YDir', 'normal');
+xlabel('Distance (m)');
+ylabel('Time (s)');
+title('Combined Oscillatory Field with Redistribution');
+colorbar;
+
+%% Energy Density Redistribution Visualization
+figure;
+imagesc(x, t, energy_density);
+set(gca, 'YDir', 'normal');
+xlabel('Distance (m)');
+ylabel('Time (s)');
+title('Energy Density Redistribution Over Time');
+colorbar;
+
+%% Intersection Points at a Specific Time Slice
+figure;
+plot(x, combined_slice, 'b', 'LineWidth', 1.5);
+hold on;
+plot(x, energy_slice, 'r--', 'LineWidth', 1.5);
+scatter(intersection_x, intersection_y, 'k', 'filled');
+xlabel('Distance (m)');
+ylabel('Amplitude / Energy Density');
+title('Node Formation and Energy Redistribution at t=5s');
+legend('Combined Field', 'Energy Density', 'Intersection Points');
+grid on;
+hold off;
+
+%% Print Intersection Points
+disp('Intersection Points Detected at Positions (x-coordinates):');
+disp(intersection_x);

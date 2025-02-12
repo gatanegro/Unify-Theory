@@ -1,0 +1,135 @@
+% Simulate a photon oscillating at XYZ = (0, 0, 0)
+% and visualize its interaction points when intersecting with another oscillation.
+
+% Parameters
+time = linspace(0, 2*pi, 500); % Time steps for the oscillation
+amplitude = 1;                  % Amplitude of the oscillation (space)
+wavelength = 2*pi;              % Wavelength of the oscillation (time)
+frequency = 1 / wavelength;     % Frequency of the oscillation
+
+% Photon 1 (Central Photon)
+x1 = zeros(size(time)); % X is fixed at 0
+y1 = zeros(size(time)); % Y is fixed at 0
+z1 = amplitude * sin(frequency * time); % Z oscillates with time
+
+% Photon 2 (Oscillating Intersecting Photon)
+x2 = zeros(size(time)); % X is fixed at 0
+y2 = zeros(size(time)); % Y is fixed at 0
+z2 = amplitude * sin(frequency * time + pi/4); % Phase-shifted oscillation
+
+% Visualize the oscillations
+figure;
+plot3(x1, y1, z1, 'b', 'LineWidth', 2); hold on;
+plot3(x2, y2, z2, 'r', 'LineWidth', 2);
+
+% Mark intersection points (nodes)
+for i = 1:length(time)
+    if abs(z1(i) - z2(i)) < 0.05 % Check if the oscillations intersect
+        scatter3(x1(i), y1(i), z1(i), 50, 'filled', 'MarkerFaceColor', 'g');
+    end
+end
+
+% Enhance visualization
+grid on;
+xlabel('X (Space)'); ylabel('Y (Space)'); zlabel('Z (Amplitude)');
+title('Photon Oscillation and Intersections');
+legend('Photon 1', 'Photon 2', 'Intersection Nodes');
+axis equal;
+view(3);
+
+% Animate the oscillation
+for t = 1:length(time)
+    clf;
+    % Redraw photons
+    plot3(x1(1:t), y1(1:t), z1(1:t), 'b', 'LineWidth', 2); hold on;
+    plot3(x2(1:t), y2(1:t), z2(1:t), 'r', 'LineWidth', 2);
+    
+    % Highlight nodes up to current time
+    for i = 1:t
+        if abs(z1(i) - z2(i)) < 0.05
+            scatter3(x1(i), y1(i), z1(i), 50, 'filled', 'MarkerFaceColor', 'g');
+        end
+    end
+    
+    % Update plot settings
+    grid on;
+    xlabel('X (Space)'); ylabel('Y (Space)'); zlabel('Z (Amplitude)');
+    title('Photon Oscillation and Intersections');
+    axis equal;
+    view(3);
+    pause(0.01); % Animation speed
+end
+
+% Simulate enhanced photon oscillations with prominent waves and nodes
+
+% Parameters
+time = linspace(0, 2*pi, 500); % Time steps for the oscillation
+amplitude = 1;                  % Amplitude of the oscillation
+frequency = 1;                  % Frequency of the oscillation
+
+% Photon 1 (2D and 3D)
+x1 = zeros(size(time)); % X is fixed at 0 (for 2D and 3D)
+y1 = zeros(size(time)); % Y is fixed at 0 (for 3D)
+z1 = amplitude * sin(frequency * time); % Z oscillates with time
+
+% Photon 2 (2D and 3D)
+x2 = zeros(size(time)); % X is fixed at 0 (for 2D and 3D)
+y2 = zeros(size(time)); % Y is fixed at 0 (for 3D)
+z2 = amplitude * sin(frequency * time + pi/4); % Phase-shifted oscillation
+
+% 2D Visualization with Enhanced Waves
+figure;
+subplot(1, 2, 1);
+plot(time, z1, 'b', 'LineWidth', 2); hold on;
+plot(time, z2, 'r', 'LineWidth', 2);
+
+% Highlight nodes in 2D
+for i = 1:length(time)
+    if abs(z1(i) - z2(i)) < 0.05 % Check for intersections
+        scatter(time(i), z1(i), 100, 'filled', 'MarkerFaceColor', 'g');
+    end
+end
+xlabel('Time'); ylabel('Amplitude');
+title('2D Photon Oscillations and Nodes');
+grid on;
+legend('Photon 1', 'Photon 2', 'Nodes');
+
+% 3D Visualization with Enhanced Waves
+subplot(1, 2, 2);
+plot3(x1, y1, z1, 'b', 'LineWidth', 2); hold on;
+plot3(x2, y2, z2, 'r', 'LineWidth', 2);
+
+% Highlight nodes in 3D
+for i = 1:length(time)
+    if abs(z1(i) - z2(i)) < 0.05
+        scatter3(x1(i), y1(i), z1(i), 100, 'filled', 'MarkerFaceColor', 'g');
+    end
+end
+xlabel('X'); ylabel('Y'); zlabel('Z (Amplitude)');
+title('3D Photon Oscillations and Nodes');
+grid on;
+legend('Photon 1', 'Photon 2', 'Nodes');
+axis equal;
+view(3);
+
+% Animate the 3D Visualization with Waves
+figure;
+for t = 1:length(time)
+    clf;
+    plot3(x1(1:t), y1(1:t), z1(1:t), 'b', 'LineWidth', 2); hold on;
+    plot3(x2(1:t), y2(1:t), z2(1:t), 'r', 'LineWidth', 2);
+
+    % Highlight nodes dynamically
+    for i = 1:t
+        if abs(z1(i) - z2(i)) < 0.05
+            scatter3(x1(i), y1(i), z1(i), 100, 'filled', 'MarkerFaceColor', 'g');
+        end
+    end
+    xlabel('X'); ylabel('Y'); zlabel('Z (Amplitude)');
+    title('Dynamic 3D Photon Oscillation with Nodes');
+    axis equal;
+    view(3);
+    grid on;
+    pause(0.01); % Animation speed
+end
+

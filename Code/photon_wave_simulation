@@ -1,0 +1,47 @@
+// Parameters for the simulation
+grid_size = 200; // Grid size (NxN)
+time_steps = 200; // Number of time steps
+dx = 0.1; // Grid spacing
+dt = 0.01; // Time step size
+c = 1.0; // Speed of wave propagation
+
+// Initialize the wave field (E-field)
+wave_field = zeros(grid_size, grid_size);
+wave_velocity = zeros(grid_size, grid_size);
+
+// Define initial wave sources (photon-like oscillations)
+sources = [
+    floor(grid_size / 4), floor(grid_size / 4);
+    floor(3 * grid_size / 4), floor(3 * grid_size / 4);
+    floor(grid_size / 2), floor(grid_size / 2);
+    floor(grid_size / 4), floor(3 * grid_size / 4);
+    floor(3 * grid_size / 4), floor(grid_size / 4);
+    floor(grid_size / 4), floor(grid_size / 2);
+    floor(3 * grid_size / 4), floor(grid_size / 2);
+    floor(grid_size / 2), floor(grid_size / 4);
+    floor(grid_size / 2), floor(3 * grid_size / 4)
+];
+
+// Define source frequencies (randomized)
+source_frequency = rand(1, size(sources, 1)) * 2 + 0.5; // Random between 0.5 and 2.5 Hz
+
+// Display source information
+disp("Wave Source Positions and Frequencies:");
+for i = 1:size(sources, 1)
+    printf("Source %d -> Position: (%d, %d), Frequency: %.2f Hz\n", i, sources(i, 1), sources(i, 2), source_frequency(i));
+end
+
+// Time-dependent source term
+function wave_field = add_sources(wave_field, t, sources, source_frequency)
+    for i = 1:size(sources, 1)
+        x = int(sources(i, 1));
+        y = int(sources(i, 2));
+        freq = source_frequency(i);
+        wave_field(x, y) = wave_field(x, y) + sin(2 * %pi * freq * t) * 50; // Amplify injection
+    end
+endfunction
+
+// Update function for the wave equation
+function [wave_field, wave_velocity] = update_wave(wave_field, wave_velocity, dt, dx, c)
+    laplacian = (
+        circshift(wave_field
